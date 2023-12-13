@@ -1,0 +1,36 @@
+version: '1'
+services:
+  frontend:
+    image: autumnus/time-app-frontend:dev
+    restart: always
+    ports:
+      - "3000:3000"
+  api:
+    image: autumnus/time-app-api:dev
+    restart: always
+    ports:
+      - "5555:5000"
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: time_db
+      MYSQL_PORT: '3306'
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: time_db
+    volumes:
+      - mysql_data_public:/var/lib/mysql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysql_data_public:
